@@ -1,6 +1,7 @@
 function [xopt, fopt] = ES(fitnessfct, N, lb, ub, eval_budget)
    #temporarily
    ss_vector(1:30) = 2;
+   evaluations = 0;
    generation = 0;
    #end temporarily
 
@@ -55,13 +56,14 @@ function [xopt, fopt] = ES(fitnessfct, N, lb, ub, eval_budget)
    #EVALUATING POPULATION
    for i = 1:rows(population)
       pop_fitness(i) = fitnessfct(population(i,:));
+      evaluations += 1;
    end
 
    [PF, PI] = sort(pop_fitness);
    fopt = PF(1);
    xopt = population(PI(1),:);
 
-   while generation < eval_budget
+   while evaluations < eval_budget
       parents = selectparents(population, PI);
       rec_population = recombine(parents);
       ss_vector = ss_mutate(ss_vector);
@@ -71,6 +73,7 @@ function [xopt, fopt] = ES(fitnessfct, N, lb, ub, eval_budget)
       combined = unique([population;mut_population], 'rows');
       for i = 1:rows(combined)
          com_fitness(i) = fitnessfct(combined(i,:));
+         evaluations += 1;
       end
       [CF, CI] = sort(com_fitness);
       if CF(1) <= fopt
