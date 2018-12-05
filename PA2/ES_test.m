@@ -8,8 +8,8 @@ function [xopt,fopt] = ES_test(fitnessfct, N, lb, ub, eval_budget)
 %    ub = 100*ones(1,30);
 %    eval_budget = 10000;
 
-   mu = 20;         %%% number of parents
-   lambda = 130;    %%% number of offsprings
+   mu = 10;         %%% number of parents
+   lambda = 50;    %%% number of offsprings
    %end temporarily
    
   select_method = 1;     % MU + LAMBDA
