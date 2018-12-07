@@ -1,12 +1,14 @@
 function [xopt,fopt] = ES_final(fitnessfct, N, lb, ub, eval_budget)
 
-   ss_vector(1:30) = 1;     %% Step size vector 
+   step_size = 1;     %% Step size vector
    evaluations = 0;
    generation = 0;
 
    mu = 10;         %% number of parents
    lambda = 50;    %% number of offsprings
 
+
+                     %%%%%%%% FUNCTIONS %%%%%%%%
    
    %PICK BEST PARENTS
    function parents = selectparents(population, I)                          % function to select parents from the population based on the best fitness values
@@ -29,10 +31,10 @@ function [xopt,fopt] = ES_final(fitnessfct, N, lb, ub, eval_budget)
 
 
    %MUTATE POPULATION
-   function mut_population = mutate(rec_population, ss_vector,lambda)       % function that mutates the recombined population using the step size vector
+   function mut_population = mutate(rec_population, step_size, lambda)       % function that mutates the recombined population using the step size vector
       for i = 1:lambda
          for j = 1:N
-            mut_population(i,j) = rec_population(i,j) + (ss_vector(j) * randn);
+            mut_population(i,j) = rec_population(i,j) + (step_size * randn);
          end
       end
    end                                                                      % output the mutated population 
@@ -64,7 +66,7 @@ function [xopt,fopt] = ES_final(fitnessfct, N, lb, ub, eval_budget)
    while evaluations < eval_budget                                          % loop until the termination criterion is met
       parents = selectparents(population, PI);
       rec_population = recombine(parents,lambda);
-      mut_population = mutate(rec_population, ss_vector,lambda);
+      mut_population = mutate(rec_population, step_size,lambda);
 
       %SELECTING FROM MU + LAMBDA
       combined = unique([population;mut_population], 'rows');               % join the mu parents with lambda offsprings 
